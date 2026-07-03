@@ -10,10 +10,12 @@
 
 body{
   margin:0;
-  font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   background:var(--bg);
   color:#111;
 }
+
+/* Layout */
 
 .container{
   max-width:1000px;
@@ -22,7 +24,7 @@ body{
 }
 
 .card{
-  background:white;
+  background:#fff;
   padding:16px;
   border-radius:8px;
   box-shadow:0 1px 3px rgba(0,0,0,.06);
@@ -51,8 +53,8 @@ body{
 
 .header-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:14px;
   width:100%;
 }
@@ -77,16 +79,18 @@ body{
   line-height:1.15;
 }
 
+/* Main Navigation */
+
 .header-nav{
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
   align-items:center;
-  justify-content:flex-start;
+  gap:10px;
   width:100%;
 }
 
-.header-nav a{
+.header-nav a,
+.nav-dropdown-btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -94,63 +98,84 @@ body{
   border-radius:999px;
   background:rgba(11,95,255,.08);
   color:var(--primary);
-  text-decoration:none;
   font-weight:600;
+  text-decoration:none;
   border:1px solid transparent;
+  cursor:pointer;
   transition:
-    transform .18s ease,
     background .18s ease,
     color .18s ease,
+    transform .18s ease,
     box-shadow .18s ease;
 }
 
-/* Hover */
-
 .header-nav a:hover,
-.header-nav a:focus-visible{
+.header-nav a:focus-visible,
+.nav-dropdown-btn:hover,
+.nav-dropdown-btn:focus-visible{
   background:var(--primary);
-  color:white;
+  color:#fff;
   transform:translateY(-1px);
-  box-shadow:0 6px 18px rgba(11,95,255,.12);
+  box-shadow:0 6px 18px rgba(11,95,255,.15);
 }
-
-/* ACTIVE PAGE (NavLink automatically adds .active) */
 
 .header-nav a.active{
   background:var(--primary);
-  color:white;
+  color:#fff;
   border-color:var(--primary);
   box-shadow:0 6px 18px rgba(11,95,255,.18);
 }
 
-/* Keep active button blue even when hovered */
-
-.header-nav a.active:hover,
-.header-nav a.active:focus-visible{
+.header-nav a.active:hover{
   background:var(--primary);
-  color:white;
+  color:#fff;
 }
 
-/* Register button */
+/* Membership Dropdown */
 
-.header-nav a:last-child{
-  background:rgba(11,95,255,.08);
+.nav-dropdown{
+  position:relative;
+}
+
+.nav-dropdown-btn{
+  border:none;
+  font-size:inherit;
+  font-family:inherit;
+}
+
+.nav-dropdown-menu{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  min-width:190px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  padding:8px;
+  display:none;
+  flex-direction:column;
+  gap:6px;
+  z-index:999;
+}
+
+.nav-dropdown-menu.open{
+  display:flex;
+}
+
+.nav-dropdown-menu a{
+  width:100%;
+  justify-content:flex-start;
+  border-radius:8px;
+  background:transparent;
+  box-shadow:none;
   color:var(--primary);
-  border:1px solid rgba(11,95,255,.15);
+  padding:10px 12px;
 }
 
-.header-nav a:last-child:hover,
-.header-nav a:last-child:focus-visible{
+.nav-dropdown-menu a:hover,
+.nav-dropdown-menu a.active{
   background:var(--primary);
-  color:white;
-}
-
-/* Register active */
-
-.header-nav a:last-child.active{
-  background:var(--primary);
-  color:white;
-  border-color:var(--primary);
+  color:#fff;
 }
 
 /* Hamburger */
@@ -161,16 +186,15 @@ body{
   width:48px;
   height:48px;
   flex:0 0 48px;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   border:none;
   border-radius:8px;
   background:rgba(11,95,255,.08);
   cursor:pointer;
-  padding:0;
   transition:
-    background .18s ease,
-    box-shadow .18s ease;
+    background .2s ease,
+    box-shadow .2s ease;
 }
 
 .header-toggle:hover,
@@ -183,21 +207,20 @@ body{
 
 .header-toggle span{
   position:absolute;
-  display:block;
   width:24px;
   height:2px;
-  background:rgba(11,95,255,.55);
   border-radius:999px;
+  background:rgba(11,95,255,.55);
   transition:
     transform .3s ease,
     opacity .3s ease,
-    background .18s ease;
+    background .2s ease;
 }
 
 .header-toggle:hover span,
 .header-toggle:focus-visible span,
 .header-toggle.open span{
-  background:white;
+  background:#fff;
 }
 
 .header-toggle span:nth-child(1){
@@ -254,10 +277,10 @@ select{
 
 .btn{
   background:var(--primary);
-  color:white;
-  padding:8px 12px;
-  border-radius:6px;
+  color:#fff;
   border:none;
+  border-radius:6px;
+  padding:8px 12px;
   cursor:pointer;
 }
 
@@ -269,25 +292,22 @@ select{
 .btn.secondary{
   background:#eef2ff;
   color:var(--primary);
-  border:1px solid rgba(11,95,255,.08);
+  border:1px solid rgba(11,95,255,.1);
 }
 
 .field-btn{
   background:#eef2ff;
   color:var(--primary);
-  padding:8px 14px;
-  border-radius:6px;
   border:1px solid rgba(11,95,255,.12);
+  border-radius:6px;
+  padding:8px 14px;
   cursor:pointer;
   font-weight:600;
-  transition:
-    background .15s ease,
-    color .15s ease;
 }
 
 .field-btn.active{
   background:var(--primary);
-  color:white;
+  color:#fff;
   border-color:var(--primary);
 }
 
@@ -311,10 +331,6 @@ select{
 
   .card{
     padding:12px;
-  }
-
-  .nav{
-    flex-wrap:wrap;
   }
 
   .row{
@@ -341,8 +357,8 @@ select{
     top:100%;
     right:0;
     left:0;
+    background:#fff;
     padding:12px 16px 18px;
-    background:white;
     border-bottom-left-radius:12px;
     border-bottom-right-radius:12px;
     box-shadow:0 18px 50px rgba(0,0,0,.12);
@@ -365,12 +381,31 @@ select{
     pointer-events:auto;
   }
 
-  .header-nav a{
+  .header-nav a,
+  .nav-dropdown-btn{
     width:100%;
   }
 
+  .nav-dropdown{
+    width:100%;
+  }
+
+  .nav-dropdown-menu{
+    position:static;
+    display:none;
+    min-width:100%;
+    margin-top:8px;
+    background:#f8f9fc;
+    box-shadow:none;
+    border-radius:8px;
+  }
+
+  .nav-dropdown-menu.open{
+    display:flex;
+  }
+
   .header-brand{
-    flex:1 1 100%;
+    flex:1;
   }
 
   .header-logo{
