@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 interface HamburgerProps {
   isOpen: boolean
@@ -51,6 +51,7 @@ export default function Header() {
                 }
               }}
             />
+
             <div className="header-title">
               <strong>ECOSA</strong> — Equatorial College Old Students Association
             </div>
@@ -63,41 +64,69 @@ export default function Header() {
         </div>
 
         <nav className={`header-nav${open ? ' open' : ''}`}>
-          <Link to="/" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/"
+            end
+            onClick={() => setOpen(false)}
+          >
             Home
-          </Link>
+          </NavLink>
 
-          <Link to="/members" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/members"
+            onClick={() => setOpen(false)}
+          >
             Members
-          </Link>
+          </NavLink>
 
-          <Link to="/community" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/community"
+            onClick={() => setOpen(false)}
+          >
             Community
-          </Link>
+          </NavLink>
 
-          <Link to="/chapters" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/chapters"
+            onClick={() => setOpen(false)}
+          >
             Chapters
-          </Link>
+          </NavLink>
 
-          <Link to="/payments" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/payments"
+            onClick={() => setOpen(false)}
+          >
             Payments
-          </Link>
+          </NavLink>
 
-          <Link to="/leaders" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/leaders"
+            onClick={() => setOpen(false)}
+          >
             Leaders
-          </Link>
+          </NavLink>
 
-          <Link to="/projects" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/projects"
+            onClick={() => setOpen(false)}
+          >
             Projects
-          </Link>
+          </NavLink>
 
-          <Link to="/resources" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/resources"
+            onClick={() => setOpen(false)}
+          >
             Resources
-          </Link>
+          </NavLink>
 
-          <Link to="/register" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/register"
+            onClick={() => setOpen(false)}
+          >
             Register
-          </Link>
+          </NavLink>
         </nav>
       </div>
     </header>
