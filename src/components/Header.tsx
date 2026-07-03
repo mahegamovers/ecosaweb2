@@ -24,13 +24,20 @@ const Hamburger: React.FC<HamburgerProps> = ({ isOpen, onClick }) => {
 
 export default function Header() {
   const [open, setOpen] = useState(false)
+  const [membershipOpen, setMembershipOpen] = useState(false)
+
   const logoBase = `${import.meta.env.BASE_URL}ecosa-logo`
+
+  const closeMenus = () => {
+    setOpen(false)
+    setMembershipOpen(false)
+  }
 
   return (
     <header className="card header-bar" style={{ margin: '12px' }}>
       <div className="container nav">
         <div className="header-top">
-          <Link to="/" className="header-brand">
+          <Link to="/" className="header-brand" onClick={closeMenus}>
             <img
               src={`${logoBase}.png`}
               alt="ECOSA logo"
@@ -46,14 +53,15 @@ export default function Header() {
                   } else {
                     e.target.style.display = 'none'
                   }
-                } catch (err) {
+                } catch {
                   e.target.style.display = 'none'
                 }
               }}
             />
 
             <div className="header-title">
-              <strong>ECOSA</strong> — Equatorial College Old Students Association
+              <strong>ECOSA</strong> — Equatorial College Old Students
+              Association
             </div>
           </Link>
 
@@ -64,68 +72,60 @@ export default function Header() {
         </div>
 
         <nav className={`header-nav${open ? ' open' : ''}`}>
-          <NavLink
-            to="/"
-            end
-            onClick={() => setOpen(false)}
-          >
+          <NavLink to="/" end onClick={closeMenus}>
             Home
           </NavLink>
 
-          <NavLink
-            to="/members"
-            onClick={() => setOpen(false)}
+          {/* Membership Dropdown */}
+          <div
+            className="nav-dropdown"
+            onMouseLeave={() => setMembershipOpen(false)}
           >
-            Members
-          </NavLink>
+            <button
+              type="button"
+              className="nav-dropdown-btn"
+              onClick={() => setMembershipOpen((prev) => !prev)}
+            >
+              Membership ▾
+            </button>
 
-          <NavLink
-            to="/community"
-            onClick={() => setOpen(false)}
-          >
+            <div
+              className={`nav-dropdown-menu${
+                membershipOpen ? ' open' : ''
+              }`}
+            >
+              <NavLink to="/register" onClick={closeMenus}>
+                Register
+              </NavLink>
+
+              <NavLink to="/members" onClick={closeMenus}>
+                Members
+              </NavLink>
+
+              <NavLink to="/chapters" onClick={closeMenus}>
+                Chapters
+              </NavLink>
+            </div>
+          </div>
+
+          <NavLink to="/community" onClick={closeMenus}>
             Community
           </NavLink>
 
-          <NavLink
-            to="/chapters"
-            onClick={() => setOpen(false)}
-          >
-            Chapters
-          </NavLink>
-
-          <NavLink
-            to="/payments"
-            onClick={() => setOpen(false)}
-          >
+          <NavLink to="/payments" onClick={closeMenus}>
             Payments
           </NavLink>
 
-          <NavLink
-            to="/leaders"
-            onClick={() => setOpen(false)}
-          >
+          <NavLink to="/leaders" onClick={closeMenus}>
             Leaders
           </NavLink>
 
-          <NavLink
-            to="/projects"
-            onClick={() => setOpen(false)}
-          >
+          <NavLink to="/projects" onClick={closeMenus}>
             Projects
           </NavLink>
 
-          <NavLink
-            to="/resources"
-            onClick={() => setOpen(false)}
-          >
+          <NavLink to="/resources" onClick={closeMenus}>
             Resources
-          </NavLink>
-
-          <NavLink
-            to="/register"
-            onClick={() => setOpen(false)}
-          >
-            Register
           </NavLink>
         </nav>
       </div>
