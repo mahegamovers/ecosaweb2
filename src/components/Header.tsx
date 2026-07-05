@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 interface HamburgerProps {
@@ -26,12 +26,32 @@ export default function Header() {
   const [open, setOpen] = useState(false)
   const [membershipOpen, setMembershipOpen] = useState(false)
 
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
   const logoBase = `${import.meta.env.BASE_URL}ecosa-logo`
 
   const closeMenus = () => {
     setOpen(false)
     setMembershipOpen(false)
   }
+
+  // Close membership dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setMembershipOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   return (
     <header className="card header-bar" style={{ margin: '12px' }}>
@@ -77,16 +97,22 @@ export default function Header() {
           </NavLink>
 
           {/* Membership Dropdown */}
-          <div
-            className="nav-dropdown"
-            onMouseLeave={() => setMembershipOpen(false)}
-          >
+          <div className="nav-dropdown" ref={dropdownRef}>
             <button
               type="button"
-              className="nav-dropdown-btn"
+              className={`nav-dropdown-btn${
+                membershipOpen ? ' active' : ''
+              }`}
               onClick={() => setMembershipOpen((prev) => !prev)}
             >
-              Membership ▾
+              <span>Membership</span>
+              <span
+                className={`dropdown-arrow${
+                  membershipOpen ? ' open' : ''
+                }`}
+              >
+                ▼
+              </span>
             </button>
 
             <div
