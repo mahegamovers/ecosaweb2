@@ -81,20 +81,6 @@ export default function Payments(){
     alert(`Thank you, ${name}. You are now registered as a member.`)
   }
 
-  const handleContributePay = () => {
-    setAmount('20000')
-    setMethod('mpesa')
-    alert('Contribution amount set to UGX 20,000. Enter your details and submit.')
-  }
-
-  const handleDonate = () => {
-    const entered = window.prompt('Enter donation amount in UGX')
-    if (!entered) return
-    setAmount(entered.trim())
-    setMethod('card')
-    alert(`Donation amount set to UGX ${entered.trim()}. Enter your details and submit.`)
-  }
-
   return (
     <>
       <div className="card">

@@ -1,40 +1,95 @@
-# ECOSA Frontend (React + TypeScript)
+# ECOSA Online
 
-ECOSA Online — Equatorial College Old Students Association web app. Use this site to register, manage your alumni profile, pay membership, browse community posts, view jobs and access shared resources. The frontend stores data locally in your browser for quick demos.
+ECOSA Online is a React and TypeScript single-page app for the Equatorial College Old Students Association. It supports alumni registration, member discovery, membership payments, community posts, jobs, leadership information, chapters, resources, and project donation flows.
 
-Quick start:
+## System Architecture
+
+The project is a client-rendered Vite application. Netlify serves the built static assets from `dist`, and `public/_redirects` rewrites all routes to `index.html` so React Router can handle deep links.
+
+Current runtime layers:
+
+- **Static hosting:** Vite builds the SPA from `src/main.tsx`, `src/App.tsx`, and the route components under `src/pages`.
+- **Routing:** `react-router-dom` defines browser routes in `src/App.tsx`.
+- **UI shell:** `src/components/Header.tsx` renders the global navigation and ECOSA logo assets from `public`.
+- **Data service:** `src/services/mockService.ts` centralizes all member, payment, post, poll, leader, job, and resource operations.
+- **Persistence:** The app currently stores demo data in browser `localStorage`. The service layer also attempts requests to `http://localhost:4000/api` for compatible local API endpoints and falls back to local storage if the API is unavailable.
+- **Assets:** Static logos and sample media live in `public` and are referenced with root-relative URLs or `import.meta.env.BASE_URL`.
+
+There are no Netlify Functions, database schema, or production backend modules in this repository at the moment.
+
+## User Workflow
+
+1. Visitors land on the home page and can register, pay membership fees, browse community updates, search members, or review ECOSA projects.
+2. Registration creates or updates a member record through `registerMember` in the shared service layer.
+3. Payments collect member details, create a member when needed, and record a local payment entry. If a local API is running, payment initiation is attempted before falling back to local recording.
+4. Community, jobs, leaders, resources, and member pages read from the same service layer so the app can work as a self-contained demo.
+5. The dashboard route exists for admin review and publishing community updates, but it is not linked from the public navigation.
+
+## Code Architecture
+
+```text
+src/
+  main.tsx                 React entry point and BrowserRouter setup
+  App.tsx                  Route table and top-level page composition
+  index.css                Global styles and responsive layout rules
+  components/
+    Header.tsx             Site navigation and logo handling
+    MemberCard.tsx         Member list card
+    MemberLink.tsx         Member-name-to-profile resolver
+    PostCard.tsx           Community post interactions
+    ProjectsSection.tsx    Featured ECOSA projects
+  pages/
+    Home.tsx               Landing workflow shortcuts and projects preview
+    Register.tsx           Alumni registration form
+    Payments.tsx           Membership, donation, event, and project payments
+    MembersList.tsx        Searchable member directory
+    MemberProfile.tsx      Member detail page
+    Community.tsx          Community feed
+    JobBoard.tsx           Job listing and posting flow
+    Leaders.tsx            Leadership view
+    Resources.tsx          Shared resources
+    Chapters.tsx           Chapter information
+    Dashboard.tsx          Admin-oriented member, payment, and post review
+    Projects.tsx           Project listing page
+    Login.tsx              Local login form for routes that require a session
+  services/
+    mockService.ts         API adapter, localStorage fallback, and seeded demo data
+```
+
+Important implementation notes:
+
+- `mockService.ts` is the boundary between UI code and persistence. New pages should use this service instead of reading or writing `localStorage` directly.
+- Seed data is initialized in the browser when the service module loads.
+- Payment buttons currently simulate successful local recording when no local API responds.
+- `scripts/ensure-build-deps.cjs` installs dependencies during the build script if `node_modules/.bin/vite` is missing.
+
+## Development
+
+Install dependencies and start the Vite dev server:
 
 ```bash
-cd "ECOSA ONLINE/ECOSA-frontend"
 npm install
 npm run dev
 ```
 
-Notes for developers:
-- The frontend currently uses local browser storage for demo data. To enable production features, point the frontend at an API and configure a payment gateway.
-- The app uses Vite + React + TypeScript.
-
-Backend (optional, recommended):
-
-Start the lightweight Express backend to persist posts, votes, leaders and members:
+Build command used by the project:
 
 ```bash
-cd "ECOSA ONLINE/ECOSA-backend"
-npm install
-npm start
+npm run build
 ```
 
-When a backend server is available at `http://localhost:4000` the frontend will use it; otherwise the app will continue to operate using local browser storage.
+Preview a built app locally:
 
-Server features added:
-- Session-based login endpoints: `POST /api/auth/login` and `POST /api/auth/logout` (uses server-side session cookie).
-- Stripe Checkout support: `POST /api/create-checkout-session` — requires `STRIPE_SECRET_KEY` env var.
-
-To enable Stripe (test):
-
-```powershell
-setx STRIPE_SECRET_KEY "sk_test_..."
-setx SESSION_SECRET "a_secure_secret"
+```bash
+npm run preview
 ```
 
-Restart the backend after setting env vars.
+## Deployment
+
+Netlify can deploy this project as a static Vite site.
+
+- Build command: `npm run build`
+- Publish directory: `dist`
+- SPA fallback: configured in `public/_redirects`
+
+If production persistence is added later, replace the local API fallback with Netlify Functions and Netlify Database so registration, payments, posts, votes, resources, and jobs survive across browsers and devices.
