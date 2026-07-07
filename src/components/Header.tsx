@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 interface HamburgerProps {
-  isOpen: boolean
-  onClick: () => void
+  isOpen: boolean;
+  onClick: () => void;
 }
 
 const Hamburger: React.FC<HamburgerProps> = ({ isOpen, onClick }) => {
   return (
     <button
-      className={`header-toggle${isOpen ? ' open' : ''}`}
+      className={`header-toggle${isOpen ? " open" : ""}`}
       type="button"
       onClick={onClick}
       aria-label="Menu"
@@ -19,62 +19,71 @@ const Hamburger: React.FC<HamburgerProps> = ({ isOpen, onClick }) => {
       <span />
       <span />
     </button>
-  )
-}
+  );
+};
 
 export default function Header() {
-  const [open, setOpen] = useState(false)
-  const [membershipOpen, setMembershipOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [membershipOpen, setMembershipOpen] = useState(false);
 
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const membershipRef = useRef<HTMLDivElement>(null);
 
-  const logoBase = `${import.meta.env.BASE_URL}ecosa-logo`
+  const logoBase = `${import.meta.env.BASE_URL}ecosa-logo`;
 
   const closeMenus = () => {
-    setOpen(false)
-    setMembershipOpen(false)
-  }
+    setOpen(false);
+    setAboutOpen(false);
+    setMembershipOpen(false);
+  };
 
-  // Close membership dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        aboutRef.current &&
+        !aboutRef.current.contains(event.target as Node)
       ) {
-        setMembershipOpen(false)
+        setAboutOpen(false);
       }
-    }
 
-    document.addEventListener('mousedown', handleClickOutside)
+      if (
+        membershipRef.current &&
+        !membershipRef.current.contains(event.target as Node)
+      ) {
+        setMembershipOpen(false);
+      }
+    };
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <header className="card header-bar" style={{ margin: '12px' }}>
+    <header className="card header-bar" style={{ margin: "12px" }}>
       <div className="container nav">
         <div className="header-top">
           <Link to="/" className="header-brand" onClick={closeMenus}>
             <img
               src={`${logoBase}.png`}
-              alt="ECOSA logo"
+              alt="ECOSA Logo"
               className="header-logo"
               onError={(e: any) => {
                 try {
                   if (!e.target._triedJpg) {
-                    e.target._triedJpg = true
-                    e.target.src = `${logoBase}.jpg`
+                    e.target._triedJpg = true;
+                    e.target.src = `${logoBase}.jpg`;
                   } else if (!e.target._triedJpeg) {
-                    e.target._triedJpeg = true
-                    e.target.src = `${logoBase}.jpeg`
+                    e.target._triedJpeg = true;
+                    e.target.src = `${logoBase}.jpeg`;
                   } else {
-                    e.target.style.display = 'none'
+                    e.target.style.display = "none";
                   }
                 } catch {
-                  e.target.style.display = 'none'
+                  e.target.style.display = "none";
                 }
               }}
             />
@@ -91,24 +100,57 @@ export default function Header() {
           />
         </div>
 
-        <nav className={`header-nav${open ? ' open' : ''}`}>
+        <nav className={`header-nav${open ? " open" : ""}`}>
+          {/* Home */}
           <NavLink to="/" end onClick={closeMenus}>
             Home
           </NavLink>
 
+          {/* About Dropdown */}
+          <div className="nav-dropdown" ref={aboutRef}>
+            <button
+              type="button"
+              className={`nav-dropdown-btn${aboutOpen ? " active" : ""}`}
+              onClick={() => setAboutOpen((prev) => !prev)}
+            >
+              <span>About</span>
+              <span className={`dropdown-arrow${aboutOpen ? " open" : ""}`}>
+                ▼
+              </span>
+            </button>
+
+            <div className={`nav-dropdown-menu${aboutOpen ? " open" : ""}`}>
+              <NavLink to="/about" onClick={closeMenus}>
+                What is ECOSA?
+              </NavLink>
+
+              <NavLink to="/leaders" onClick={closeMenus}>
+                Leaders
+              </NavLink>
+
+              <NavLink to="/projects" onClick={closeMenus}>
+                Projects
+              </NavLink>
+
+              <NavLink to="/resources" onClick={closeMenus}>
+                Resources
+              </NavLink>
+            </div>
+          </div>
+
           {/* Membership Dropdown */}
-          <div className="nav-dropdown" ref={dropdownRef}>
+          <div className="nav-dropdown" ref={membershipRef}>
             <button
               type="button"
               className={`nav-dropdown-btn${
-                membershipOpen ? ' active' : ''
+                membershipOpen ? " active" : ""
               }`}
               onClick={() => setMembershipOpen((prev) => !prev)}
             >
               <span>Membership</span>
               <span
                 className={`dropdown-arrow${
-                  membershipOpen ? ' open' : ''
+                  membershipOpen ? " open" : ""
                 }`}
               >
                 ▼
@@ -117,7 +159,7 @@ export default function Header() {
 
             <div
               className={`nav-dropdown-menu${
-                membershipOpen ? ' open' : ''
+                membershipOpen ? " open" : ""
               }`}
             >
               <NavLink to="/register" onClick={closeMenus}>
@@ -134,27 +176,20 @@ export default function Header() {
             </div>
           </div>
 
-          <NavLink to="/community" onClick={closeMenus}>
-            Community
-          </NavLink>
-
+          {/* Standalone Pages */}
           <NavLink to="/payments" onClick={closeMenus}>
             Payments
           </NavLink>
 
-          <NavLink to="/leaders" onClick={closeMenus}>
-            Leaders
+          <NavLink to="/community" onClick={closeMenus}>
+            Community
           </NavLink>
 
-          <NavLink to="/projects" onClick={closeMenus}>
-            Projects
-          </NavLink>
-
-          <NavLink to="/resources" onClick={closeMenus}>
-            Resources
+          <NavLink to="/contact" onClick={closeMenus}>
+            Contact
           </NavLink>
         </nav>
       </div>
     </header>
-  )
+  );
 }
