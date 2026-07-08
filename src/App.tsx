@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 // Main Pages
 import Home from "./pages/Home";
@@ -74,13 +75,23 @@ export default function App() {
             element={
               <div
                 style={{
-                  padding: "4rem 1rem",
                   textAlign: "center",
+                  padding: "80px 20px",
                 }}
               >
-                <h1>404</h1>
+                <h1
+                  style={{
+                    fontSize: "72px",
+                    color: "#0b5fff",
+                    marginBottom: "10px",
+                  }}
+                >
+                  404
+                </h1>
+
                 <h2>Page Not Found</h2>
-                <p>
+
+                <p style={{ color: "#6b7280" }}>
                   Sorry, the page you're looking for doesn't exist.
                 </p>
               </div>
@@ -88,6 +99,8 @@ export default function App() {
           />
         </Routes>
       </main>
+
+      <Footer />
     </>
   );
 }
